@@ -5,6 +5,15 @@ Go CLI for the [SteerMesh](https://steermesh.dev) platform: compile tool-agnosti
 - **Website:** https://steermesh.dev  
 - **Spec:** https://github.com/SteerMesh/spec  
 
+## Quickstart
+
+```bash
+steer init
+steer add security-core@1.0.0
+steer compile
+steer sync
+```
+
 ## Commands
 
 | Command | Description |
