@@ -1,0 +1,21 @@
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Go binaries
+/bin
+/build
+/dist
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Go test
+*.test
+*.out
+coverage.out
+
+# Vendor
+/vendor
