@@ -24,6 +24,7 @@ steer sync
 | `steer add pack@version` | Add a pack and update lockfile |
 | `steer sync` | Sync with SteerMesh Cloud (stub when API not ready) |
 | `steer doctor` | Check env, config, lockfile, and bundle consistency |
+| `steer verify-bundle` | Verify bundle manifest signature (optional; use with --public-key if manifest is signed) |
 
 ## Build and test
 
@@ -49,6 +50,18 @@ make lint     # Run linters
 ## Determinism
 
 Builds are deterministic: no timestamps in bundle manifest or rendered output; stable iteration order. SHA256 checksums are emitted in the bundle manifest for every generated file.
+
+## Bundle signing (optional)
+
+You can optionally sign the bundle manifest after compile so consumers can verify authenticity.
+
+- **Sign at compile:** `steer compile --sign --sign-key /path/to/private-key.pem`  
+  Uses an Ed25519 private key (PEM PKCS#8). The manifest is signed over its canonical form (JSON without the `signature` field) and the signature is written into `bundle-manifest.json`. Generate a key with: `openssl genpkey -algorithm Ed25519 -out key.pem` and export the public key with: `openssl pkey -in key.pem -pubout -out pub.pem`.
+
+- **Verify standalone:** `steer verify-bundle --manifest .steer/output/bundle-manifest.json --public-key /path/to/pub.pem`  
+  If the manifest has no signature, the command reports that and exits 0. If it is signed, `--public-key` is required; the command exits 0 with "Signature valid." or non-zero on failure.
+
+- **Verify in doctor:** Set `STEER_SIGNATURE_PUBLIC_KEY` to the path of your public key PEM. When you run `steer doctor`, if a bundle manifest exists and contains a signature, it will be verified and the result reported ("Bundle signature: valid." or "Bundle signature: invalid (...)").
 
 ## Roadmap / TODO
 
